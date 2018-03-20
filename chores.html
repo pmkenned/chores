@@ -3,28 +3,23 @@
 
 <head>
 	<title></title>
-
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
 	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
-
 </head>
 
 <body>
 
-<div class="input-append">
-    <input class="date-picker" id="foo" type="text" />
-    <label for="foo" class="add-on"><i class="fa fa-calendar"></i></label>
-</div>
+	<!-- <div class="input-append">
+		<input class="date-picker" id="foo" type="text" />
+		<label for="foo" class="add-on"><i class="fa fa-calendar"></i></label>
+	</div> -->
 
 	<script>
 	
-	$(".date-picker").datepicker();
+	//$(".date-picker").datepicker();
 
 	moment.updateLocale('en', {
 		calendar : {
@@ -37,12 +32,6 @@
 		}
 	});
 
-	function addDays(date, days) {
-		var result = new Date(date);
-		result.setDate(result.getDate() + days);
-		return result;
-	}
-
 	function makeBtnFunc(chore) {
 		function btnFunc() {
 			chore.lastDone     = moment();
@@ -50,22 +39,45 @@
 			chore.nextRequired.add(chore.doEvery, 'days');
 			document.getElementById(chore.id + "_last").value = chore.lastDone.format('L');
 			document.getElementById(chore.id + "_next").innerHTML = chore.nextRequired.calendar();
-			//var d_l = new Date();
-			//document.getElementById(chore.id + "_last").value = d_l.toLocaleDateString();
-			//var d_n = addDays(d_l, chore.doEvery);
-			//document.getElementById(chore.id + "_next").innerHTML = d_n.toLocaleDateString();
 		}
 		return btnFunc;
 	}
 	
-	var chore_divs = [];
-	
 	var chores = [];
-	chores.push({btnStr:"Take out trash",   id:"trash",   doEvery:5, lastDone: moment().subtract(5, 'days'), nextRequired: moment().add(8, 'days')});
-	chores.push({btnStr:"Make bed",         id:"bed",     doEvery:1, lastDone: moment().subtract(5, 'days'), nextRequired: moment().add(5, 'days')});
-	chores.push({btnStr:"Clean litter box", id:"litter",  doEvery:1, lastDone: moment().subtract(5, 'days'), nextRequired: moment().add(7, 'days')});
-	chores.push({btnStr:"Dishes",           id:"dishes",  doEvery:1, lastDone: moment().subtract(5, 'days'), nextRequired: moment().add(6, 'days')});
-	chores.push({btnStr:"Laundry",          id:"laundry", doEvery:5, lastDone: moment().subtract(5, 'days'), nextRequired: moment().add(4, 'days')});
+	// daily
+	chores.push({btnStr:"Walk Kingsley",                     id: "walk_kingsley", doEvery: 1, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Empty litter box",                  id: "empty_litter",  doEvery: 1, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Feed Kingsley",                     id: "feed_kingsley", doEvery: 1, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Feed Zoe",                          id: "feed_zoe",      doEvery: 1, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Put away dry & clean dishes",       id: "dishes",        doEvery: 1, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Load, run dishwasher",              id: "run_dish",      doEvery: 1, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Clean kitchen",                     id: "clean_kitchen", doEvery: 1, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Check mail",                        id: "check_mail",    doEvery: 1, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Make bed, tidy bedroom",            id: "bed",           doEvery: 1, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	// every few days                                       
+	chores.push({btnStr:"Take out trash",                    id: "trash",         doEvery: 3, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Tidy downstairs",                   id: "tidy_down",     doEvery: 3, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Sweep downstairs",                  id: "sweep_down",    doEvery: 3, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Wash clothes",                      id: "wash_clothes",  doEvery: 5, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Fold clothes",                      id: "fold_clothes",  doEvery: 5, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	// week end                                             
+	chores.push({btnStr:"Make lunches for week",             id: "make_lunches",  doEvery: 7, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Change litter box",                 id: "change_litter", doEvery: 7, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Take trash to curb",                id: "trash_curb",    doEvery: 7, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Buy groceries",                     id: "groceries",     doEvery: 7, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Meal prep for week",                id: "meal_prep",     doEvery: 7, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Tidy office",                       id: "tidy_off",      doEvery: 7, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Mow lawn",                          id: "mow_lawn",      doEvery: 7, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Weed eat",                          id: "weed_eat",      doEvery: 7, lastDone: moment().subtract(1, 'days'), nextRequired: moment().add(8, 'days')});
+	// every few weeks                                      
+	chores.push({btnStr:"Bathe Kingsley",                    id: "bathe",         doEvery:18, lastDone: moment().subtract(10, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Wash sheets & towels",              id: "sheets",        doEvery:18, lastDone: moment().subtract(10, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Vacuum downstairs",                 id: "vac_dn",        doEvery:14, lastDone: moment().subtract(10, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Vacuum bedroom & office",           id: "vac_bed",       doEvery:14, lastDone: moment().subtract(10, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Clean upstairs guest bathroom",     id: "bath_g",        doEvery:18, lastDone: moment().subtract(10, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Clean upstairs master bathroom",    id: "bath_m",        doEvery:18, lastDone: moment().subtract(10, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Clean downstairs bathroom",         id: "bath_dn",       doEvery:18, lastDone: moment().subtract(10, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Dust bedroom, office, downstairs",  id: "dust",          doEvery:18, lastDone: moment().subtract(10, 'days'), nextRequired: moment().add(8, 'days')});
 	
 	function initChores() {
 		var chore;
@@ -76,19 +88,19 @@
 			var btn = document.createElement('button');
 			btn.onclick = makeBtnFunc(chores[chore]);
 			btn.innerText = chores[chore].btnStr;
-			btn.style.cssText = 'width: 200px';
+//			btn.style.cssText = 'width: 200px; height: 80px; margin: 15px 15px;';
+			btn.style.cssText = 'width: 250px; margin: 5px 15px;';
 			choreDiv.appendChild(btn);
 
 			var input = document.createElement('input');
 			input.setAttribute("type", "text");
 			input.id = chores[chore].id + "_last";
-			//var d = addDays(new Date(), -2);
-			//input.value = d.toLocaleDateString();
 			input.value = chores[chore].lastDone.format('L');
+			input.style.cssText = 'width: 100px; margin: 5px 15px;';
 			choreDiv.appendChild(input);
-			
-			chores[chore].nextRequired = chores[chore].lastDone.add(chores[chore].doEvery, 'days');
-			chores[chore].lastDone.subtract(chores[chore].doEvery, 'days');
+
+			chores[chore].nextRequired = chores[chore].lastDone.clone(); // init nextRequired
+			chores[chore].nextRequired.add(chores[chore].doEvery, 'days');
 
 			var span = document.createElement('span');
 			span.id = chores[chore].id + "_next";
@@ -106,6 +118,8 @@
 		var chore;
 		for (chore in chores) {
 			// chores[chore].div.childNodes[1].value; // TODO: use date in value to create moment object
+			var date = new Date(chores[chore].div.childNodes[1].value);
+			chores[chore].lastDone = moment(date);
 			chores[chore].nextRequired = chores[chore].lastDone.clone();
 			chores[chore].nextRequired.add(chores[chore].doEvery, 'days');
 			chores[chore].div.childNodes[2].innerHTML = chores[chore].nextRequired.calendar();
