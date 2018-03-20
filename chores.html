@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title></title>
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>
+
+</head>
+
+<body>
+
+<div class="input-append">
+    <input class="date-picker" id="foo" type="text" />
+    <label for="foo" class="add-on"><i class="fa fa-calendar"></i></label>
+</div>
+
+	<script>
+	
+	$(".date-picker").datepicker();
+
+	moment.updateLocale('en', {
+		calendar : {
+			lastDay : '[Yesterday]',
+			sameDay : '[Today]',
+			nextDay : '[Tomorrow]',
+			lastWeek : '[Last] dddd',
+			nextWeek : 'dddd',
+			sameElse : 'L'
+		}
+	});
+
+	function addDays(date, days) {
+		var result = new Date(date);
+		result.setDate(result.getDate() + days);
+		return result;
+	}
+
+	function makeBtnFunc(chore) {
+		function btnFunc() {
+			chore.lastDone     = moment();
+			chore.nextRequired = chore.lastDone.clone();
+			chore.nextRequired.add(chore.doEvery, 'days');
+			document.getElementById(chore.id + "_last").value = chore.lastDone.format('L');
+			document.getElementById(chore.id + "_next").innerHTML = chore.nextRequired.calendar();
+			//var d_l = new Date();
+			//document.getElementById(chore.id + "_last").value = d_l.toLocaleDateString();
+			//var d_n = addDays(d_l, chore.doEvery);
+			//document.getElementById(chore.id + "_next").innerHTML = d_n.toLocaleDateString();
+		}
+		return btnFunc;
+	}
+	
+	var chore_divs = [];
+	
+	var chores = [];
+	chores.push({btnStr:"Take out trash",   id:"trash",   doEvery:5, lastDone: moment().subtract(5, 'days'), nextRequired: moment().add(8, 'days')});
+	chores.push({btnStr:"Make bed",         id:"bed",     doEvery:1, lastDone: moment().subtract(5, 'days'), nextRequired: moment().add(5, 'days')});
+	chores.push({btnStr:"Clean litter box", id:"litter",  doEvery:1, lastDone: moment().subtract(5, 'days'), nextRequired: moment().add(7, 'days')});
+	chores.push({btnStr:"Dishes",           id:"dishes",  doEvery:1, lastDone: moment().subtract(5, 'days'), nextRequired: moment().add(6, 'days')});
+	chores.push({btnStr:"Laundry",          id:"laundry", doEvery:5, lastDone: moment().subtract(5, 'days'), nextRequired: moment().add(4, 'days')});
+	
+	function initChores() {
+		var chore;
+		for (chore in chores) {
+			var choreDiv = document.createElement('div');
+			choreDiv.id = chores[chore].id + "_div";
+		
+			var btn = document.createElement('button');
+			btn.onclick = makeBtnFunc(chores[chore]);
+			btn.innerText = chores[chore].btnStr;
+			btn.style.cssText = 'width: 200px';
+			choreDiv.appendChild(btn);
+
+			var input = document.createElement('input');
+			input.setAttribute("type", "text");
+			input.id = chores[chore].id + "_last";
+			//var d = addDays(new Date(), -2);
+			//input.value = d.toLocaleDateString();
+			input.value = chores[chore].lastDone.format('L');
+			choreDiv.appendChild(input);
+			
+			chores[chore].nextRequired = chores[chore].lastDone.add(chores[chore].doEvery, 'days');
+			chores[chore].lastDone.subtract(chores[chore].doEvery, 'days');
+
+			var span = document.createElement('span');
+			span.id = chores[chore].id + "_next";
+			span.innerHTML = chores[chore].nextRequired.calendar();
+			choreDiv.appendChild(span);
+
+			document.body.appendChild(choreDiv);
+			chores[chore].div = choreDiv;		
+
+			$( "#" + chores[chore].id + "_last" ).datepicker();
+		}
+	}
+	
+	function updateNext() {
+		var chore;
+		for (chore in chores) {
+			// chores[chore].div.childNodes[1].value; // TODO: use date in value to create moment object
+			chores[chore].nextRequired = chores[chore].lastDone.clone();
+			chores[chore].nextRequired.add(chores[chore].doEvery, 'days');
+			chores[chore].div.childNodes[2].innerHTML = chores[chore].nextRequired.calendar();
+		}
+	}
+	
+	function reorderChores() {
+	
+		// sort array of chore divs
+		chores.sort(function(a, b) {
+			var diff = a.nextRequired.startOf('day').diff(b.nextRequired.startOf('day'));
+			if(diff < 0)  { return -1; }
+			if(diff > 0 ) { return 1;  }
+			if(diff == 0) { return 0;  }
+		});
+
+		// remove all the chore divs from the body
+		var chore;
+		for(chore in chores) {
+			chores[chore].div.remove();
+		}
+		
+		// add chore divs to body
+		var chore;
+		for(chore in chores) {
+			document.body.appendChild(chores[chore].div);
+		}
+	}
+	
+	function choresInOrder() {
+		if(chores.length == 0) {
+			return true;
+		}
+		var inOrder = true;
+		var chore;
+		var prev = chores[0].nextRequired;
+		for(chore in chores) {
+			curr = chores[chore].nextRequired;
+			if(curr.startOf('day').diff(prev.startOf('day')) < 0) {
+				inOrder = false;
+				break;
+			}
+			prev = curr;
+		}
+		return inOrder;
+	}
+	
+	//reorderChores();
+	
+	initChores();
+	
+	setInterval(function(){ updateNext(); if(!choresInOrder()) {reorderChores();} }, 500);
+	
+	</script>
+
+</body>
+
+</html>
