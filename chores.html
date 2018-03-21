@@ -12,6 +12,8 @@
 
 <body>
 
+    <div id="main" style="margin: auto; width: 600px"></div>
+
 	<!-- <div class="input-append">
 		<input class="date-picker" id="foo" type="text" />
 		<label for="foo" class="add-on"><i class="fa fa-calendar"></i></label>
@@ -107,7 +109,8 @@
 			span.innerHTML = chores[chore].nextRequired.calendar();
 			choreDiv.appendChild(span);
 
-			document.body.appendChild(choreDiv);
+			var main_div = document.getElementById("main");
+			main_div.appendChild(choreDiv);
 			chores[chore].div = choreDiv;		
 
 			$( "#" + chores[chore].id + "_last" ).datepicker();
@@ -144,8 +147,9 @@
 		
 		// add chore divs to body
 		var chore;
+        var main_div = document.getElementById("main");
 		for(chore in chores) {
-			document.body.appendChild(chores[chore].div);
+			main_div.appendChild(chores[chore].div);
 		}
 	}
 	
